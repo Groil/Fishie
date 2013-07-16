@@ -56,17 +56,6 @@ gchar *get_config_filename() {
     return g_build_filename(hexchat_get_info(ph, "configdir"), "addon_fishlim.conf", NULL);
 }
 
-static char *Strip_trailing_space(char *nick) {
-	int end;
-	end = strlen(nick);
-	
-	if (nick[end] == ' ')
-	{
-		nick[end] = '\0';
-	}
-	return nick;
-}
-
 /**
  * Appends data to a string. Returns true if there was sufficient memory.
  * Frees *s and returns false if an error occurs.
@@ -218,7 +207,7 @@ static int handle_setkey(char *word[], char *word_eol[], void *userdata) {
     } else {
         // /setkey #channel password
         //nick = word[2];
-        nick = Strip_trailing_space(word[2]);
+        nick = word[2];
 		key = word_eol[3];
     }
     
@@ -243,7 +232,7 @@ static int handle_delkey(char *word[], char *word_eol[], void *userdata) {
         hexchat_printf(ph, "%s\n", usage_delkey);
         return HEXCHAT_EAT_HEXCHAT;
     }
-    nick = Strip_trailing_space( word_eol[2]);
+    nick = word[2];
     
     // Delete the given nick from the key store
     if (keystore_delete_nick(nick)) {
@@ -268,8 +257,7 @@ static int handle_getkey(char *word[], char *word_eol[], void *userdata) {
         return HEXCHAT_EAT_HEXCHAT;
     }
     
-	nick = Strip_trailing_space( word_eol[2]);
-    //nick = word_eol[2];
+	nick = word[2];
 	
 	tmpkey = keystore_get_key(nick);
 	
